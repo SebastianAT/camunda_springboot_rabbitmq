@@ -1,0 +1,6 @@
+com\example\workflow\CamundaMessageRabbitRestController.class
+com\example\workflow\rabbitmq\CamundaMessageProcessor.class
+com\example\workflow\Application.class
+com\example\workflow\rabbitmq\CamundaMessageExchange.class
+com\example\workflow\rabbitmq\Receiver.class
+com\example\workflow\SendMessageRest.class
