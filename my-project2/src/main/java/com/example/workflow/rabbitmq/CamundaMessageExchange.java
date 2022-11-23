@@ -1,5 +1,8 @@
 package com.example.workflow.rabbitmq;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -15,10 +18,13 @@ public class CamundaMessageExchange {
 
     public static final String topicExchangeName = "camunda-exchange2";
     static final String queueName = "messages2";
+	Map<String, Object> arguments = new HashMap<>();
 
     @Bean
     Queue queue() {
         return new Queue(queueName, false);
+	//arguments.put("x-message-ttl", 5000);
+        //return new Queue(queueName, false, false, false, arguments);
     }
 
     @Bean
@@ -38,6 +44,7 @@ public class CamundaMessageExchange {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName);
         container.setMessageListener(listenerAdapter);
+	container.setPrefetchCount(3);
         return container;
     }
 

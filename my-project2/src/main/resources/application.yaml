@@ -1,6 +1,14 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#spring.datasource:
+  #url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE
+#shareable h2 database: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+ 
 
 server.port: 8092
 camunda.bpm.admin-user:
   id: demo
   password: demo
+  filter:
+    create: All tasks
+  license-file: file:///camunda-license.txt
+  application.deploy-changed-only: true

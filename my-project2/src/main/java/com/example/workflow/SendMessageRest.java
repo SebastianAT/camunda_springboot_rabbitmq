@@ -33,6 +33,7 @@ public class SendMessageRest implements JavaDelegate {
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
+	//Thread.sleep(3000);
 		String correlationKey = (String) execution.getVariable("correlationKey");
         String messageName = "msg_" + execution.getProcessEngineServices().getRepositoryService().getProcessDefinition(execution.getProcessDefinitionId()).getKey();
         BpmnModelInstance modelInstance = execution.getBpmnModelInstance();

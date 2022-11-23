@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1tb1wd3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1tb1wd3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1">
   <bpmn:process id="Process_0l3ibgw_P3" name="P3_Model" processType="None" isClosed="false" isExecutable="true">
     <bpmn:endEvent id="Event_1m1gnt6" name="[P1]">
       <bpmn:extensionElements>
-        <camunda:executionListener class="com.camunda.consulting.P3.LoggerDelegate" event="end" />
+        <camunda:executionListener class="com.example.workflow.LoggerDelegate" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>task17-Event_1m1gnt6</bpmn:incoming>
     </bpmn:endEvent>
@@ -18,7 +18,7 @@
       <bpmn:outgoing>task11-task0</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="task11-task0" sourceRef="task11" targetRef="Activity_06l7e4k" />
-    <bpmn:exclusiveGateway id="task17" name="join_loop_Activity_06l7e4k [P1]">
+    <bpmn:exclusiveGateway id="task17" name="join_loop_Activity_06l7e4k [P1]" camunda:asyncBefore="true" camunda:asyncAfter="true">
       <bpmn:incoming>task8-task17</bpmn:incoming>
       <bpmn:outgoing>task17-Event_1m1gnt6</bpmn:outgoing>
       <bpmn:outgoing>task17-Activity_06l7e4k</bpmn:outgoing>
@@ -31,8 +31,8 @@
       <bpmn:incoming>task17-Activity_06l7e4k</bpmn:incoming>
       <bpmn:outgoing>Activity_06l7e4kTMP-task17</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Activity_06l7e4kTMP-task17" sourceRef="Activity_06l7e4k" targetRef="Activity_0eia6ks" />
-    <bpmn:receiveTask id="task8" name="Receive({c} P2) [P3]" messageRef="msg2">
+    <bpmn:sequenceFlow id="Activity_06l7e4kTMP-task17" sourceRef="Activity_06l7e4k" targetRef="Activity_0kvdi7z" />
+    <bpmn:receiveTask id="task8" name="Receive({c} P2) [P3]" camunda:asyncBefore="true" camunda:asyncAfter="true" messageRef="msg2">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="type" value="receiveStep" />
@@ -41,7 +41,7 @@
           <camunda:property name="type" value="communicationStep" />
         </camunda:properties>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1hxe0o7</bpmn:incoming>
+      <bpmn:incoming>Flow_0d5jsa8</bpmn:incoming>
       <bpmn:outgoing>task8-task17</bpmn:outgoing>
     </bpmn:receiveTask>
     <bpmn:sequenceFlow id="task8-task17" sourceRef="task8" targetRef="task17" />
@@ -53,85 +53,50 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ma02tc" messageRef="startMessage6" />
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_00sv7r4" sourceRef="Event_0zfqrv6" targetRef="task11" />
-    <bpmn:sendTask id="Activity_0eia6ks" name="Send(P1) [P3]" camunda:asyncBefore="true" implementation="##WebService" camunda:delegateExpression="${sendMessageRest}">
-      <bpmn:documentation>task22</bpmn:documentation>
+    <bpmn:task id="Activity_1p2tr4g" name="T3 [P3]">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="type" value="communicationStep" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ll77e0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oit6dp</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0oit6dp" sourceRef="Activity_1p2tr4g" targetRef="Activity_0mgaehk" />
+    <bpmn:sendTask id="Activity_0mgaehk" name="Send(P2) [P3]" camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:delegateExpression="${sendMessageRest}">
+      <bpmn:documentation>task11</bpmn:documentation>
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="type" value="sendStep" />
         </camunda:properties>
+        <camunda:properties>
+          <camunda:property name="type" value="communicationStep" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0oit6dp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d5jsa8</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_0d5jsa8" sourceRef="Activity_0mgaehk" targetRef="task8" />
+    <bpmn:sequenceFlow id="Flow_0ll77e0" sourceRef="Activity_0kvdi7z" targetRef="Activity_1p2tr4g" />
+    <bpmn:receiveTask id="Activity_0kvdi7z" name="Receive(P1) [P3]" camunda:asyncBefore="true" camunda:asyncAfter="true" messageRef="Message_0jaf177">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="#{receiveEvent}" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>Activity_06l7e4kTMP-task17</bpmn:incoming>
-      <bpmn:outgoing>Flow_1mey4v1</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:sequenceFlow id="Flow_1mey4v1" sourceRef="Activity_0eia6ks" targetRef="Activity_13hg3hu" />
-    <bpmn:sendTask id="Activity_13hg3hu" name="Send(P2) [P3]" camunda:asyncBefore="true" implementation="##WebService" camunda:delegateExpression="${sendMessageRest}">
-      <bpmn:documentation>task21</bpmn:documentation>
-      <bpmn:extensionElements>
-        <camunda:properties>
-          <camunda:property name="type" value="sendStep" />
-        </camunda:properties>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1mey4v1</bpmn:incoming>
-      <bpmn:outgoing>Flow_1hxe0o7</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:sequenceFlow id="Flow_1hxe0o7" sourceRef="Activity_13hg3hu" targetRef="task8" />
+      <bpmn:outgoing>Flow_0ll77e0</bpmn:outgoing>
+    </bpmn:receiveTask>
   </bpmn:process>
   <bpmn:message id="msg2" name="msg_task8" />
   <bpmn:message id="startMessage6" name="msg_task14">
     <bpmn:extensionElements />
   </bpmn:message>
+  <bpmn:message id="Message_0jaf177" name="msg_task10" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0l3ibgw_P3">
-      <bpmndi:BPMNEdge id="Flow_1hxe0o7_di" bpmnElement="Flow_1hxe0o7">
-        <di:waypoint x="825" y="204" />
-        <di:waypoint x="855" y="204" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1mey4v1_di" bpmnElement="Flow_1mey4v1">
-        <di:waypoint x="745" y="204" />
-        <di:waypoint x="775" y="204" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00sv7r4_di" bpmnElement="Flow_00sv7r4">
-        <di:waypoint x="218" y="177" />
-        <di:waypoint x="302" y="177" />
-        <di:waypoint x="302" y="184" />
-        <di:waypoint x="385" y="184" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="task17-Activity_06l7e4k_di" bpmnElement="task17-Activity_06l7e4k">
-        <di:waypoint x="960" y="159" />
-        <di:waypoint x="960" y="109" />
-        <di:waypoint x="547" y="109" />
-        <di:waypoint x="547" y="159" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="977" y="84" width="13" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="task8-task17_di" bpmnElement="task8-task17">
-        <di:waypoint x="895" y="239" />
-        <di:waypoint x="920" y="239" />
-        <di:waypoint x="920" y="159" />
-        <di:waypoint x="960" y="159" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Activity_06l7e4kTMP-task17_di" bpmnElement="Activity_06l7e4kTMP-task17">
-        <di:waypoint x="567" y="179" />
-        <di:waypoint x="634" y="179" />
-        <di:waypoint x="634" y="204" />
-        <di:waypoint x="695" y="204" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="task17-Event_1m1gnt6_di" bpmnElement="task17-Event_1m1gnt6">
-        <di:waypoint x="960" y="209" />
-        <di:waypoint x="1083" y="159" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1013" y="159" width="18" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="task11-task0_di" bpmnElement="task11-task0">
-        <di:waypoint x="435" y="184" />
-        <di:waypoint x="522" y="184" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1m1gnt6_di" bpmnElement="Event_1m1gnt6">
-        <dc:Bounds x="1065" y="159" width="36" height="36" />
+        <dc:Bounds x="1182" y="159" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1073" y="202" width="20" height="14" />
+          <dc:Bounds x="1190" y="202" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="task11_di" bpmnElement="task11">
@@ -141,9 +106,9 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="task17_di" bpmnElement="task17" isMarkerVisible="true">
-        <dc:Bounds x="935" y="159" width="50" height="50" />
+        <dc:Bounds x="1025" y="152" width="50" height="50" />
         <bpmndi:BPMNLabel id="task17_label">
-          <dc:Bounds x="921" y="209" width="79" height="27" />
+          <dc:Bounds x="1011" y="202" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06l7e4kTMP_di" bpmnElement="Activity_06l7e4k" isMarkerVisible="true">
@@ -153,7 +118,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="task8_di" bpmnElement="task8">
-        <dc:Bounds x="855" y="159" width="50" height="80" />
+        <dc:Bounds x="925" y="159" width="50" height="80" />
         <bpmndi:BPMNLabel id="task8_label">
           <dc:Bounds x="3302" y="239" width="50" height="80" />
         </bpmndi:BPMNLabel>
@@ -164,12 +129,68 @@
           <dc:Bounds x="158" y="202" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0eia6ks_di" bpmnElement="Activity_0eia6ks">
-        <dc:Bounds x="695" y="164" width="50" height="80" />
+      <bpmndi:BPMNShape id="Activity_1p2tr4g_di" bpmnElement="Activity_1p2tr4g">
+        <dc:Bounds x="720" y="159" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13hg3hu_di" bpmnElement="Activity_13hg3hu">
-        <dc:Bounds x="775" y="164" width="50" height="80" />
+      <bpmndi:BPMNShape id="Activity_0mgaehk_di" bpmnElement="Activity_0mgaehk">
+        <dc:Bounds x="840" y="159" width="50" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i3uz1e_di" bpmnElement="Activity_0kvdi7z">
+        <dc:Bounds x="596" y="144" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="task11-task0_di" bpmnElement="task11-task0">
+        <di:waypoint x="435" y="184" />
+        <di:waypoint x="522" y="184" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task17-Event_1m1gnt6_di" bpmnElement="task17-Event_1m1gnt6">
+        <di:waypoint x="1050" y="202" />
+        <di:waypoint x="1129" y="202" />
+        <di:waypoint x="1129" y="159" />
+        <di:waypoint x="1200" y="159" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1159" y="136" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Activity_06l7e4kTMP-task17_di" bpmnElement="Activity_06l7e4kTMP-task17">
+        <di:waypoint x="567" y="179" />
+        <di:waypoint x="596" y="179" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task8-task17_di" bpmnElement="task8-task17">
+        <di:waypoint x="965" y="239" />
+        <di:waypoint x="1000" y="239" />
+        <di:waypoint x="1000" y="152" />
+        <di:waypoint x="1050" y="152" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task17-Activity_06l7e4k_di" bpmnElement="task17-Activity_06l7e4k">
+        <di:waypoint x="1050" y="152" />
+        <di:waypoint x="1050" y="109" />
+        <di:waypoint x="547" y="109" />
+        <di:waypoint x="547" y="159" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1067" y="84" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00sv7r4_di" bpmnElement="Flow_00sv7r4">
+        <di:waypoint x="218" y="177" />
+        <di:waypoint x="302" y="177" />
+        <di:waypoint x="302" y="184" />
+        <di:waypoint x="385" y="184" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oit6dp_di" bpmnElement="Flow_0oit6dp">
+        <di:waypoint x="820" y="199" />
+        <di:waypoint x="840" y="199" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d5jsa8_di" bpmnElement="Flow_0d5jsa8">
+        <di:waypoint x="890" y="199" />
+        <di:waypoint x="908" y="199" />
+        <di:waypoint x="908" y="204" />
+        <di:waypoint x="925" y="204" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ll77e0_di" bpmnElement="Flow_0ll77e0">
+        <di:waypoint x="696" y="199" />
+        <di:waypoint x="720" y="199" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

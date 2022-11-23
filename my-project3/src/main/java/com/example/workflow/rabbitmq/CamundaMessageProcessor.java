@@ -32,6 +32,13 @@ public class CamundaMessageProcessor{
 			e.printStackTrace();
 		}
         MessageRestServiceImpl service = new MessageRestServiceImpl(engine.getName(), objectMapper);
+        System.out.println("Take out msg from queue ...");
+        try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
         Response response = service.deliverMessage(messageDto);
         return response;
     }

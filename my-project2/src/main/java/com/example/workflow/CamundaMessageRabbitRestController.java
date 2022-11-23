@@ -35,18 +35,19 @@ public class CamundaMessageRabbitRestController{
         try {
             // @TODO Add better error handling for covertValue method as the true error is not bubbled.
             // Will likely require abstraction replacement of the validation functions of MessageRestServiceImpl
-            CorrelationMessageDto dto = objectMapper.readValue(message, CorrelationMessageDto.class);
+            /*CorrelationMessageDto dto = objectMapper.readValue(message, CorrelationMessageDto.class);
+System.out.println("Save msg in queue msg: " + message + " corrMsg: " + dto.toString());*/
         }catch(Exception e){
             throw new HttpMessageNotReadableException(e.getMessage());
         }
 
         rabbitTemplate.convertAndSend(CamundaMessageExchange.topicExchangeName, "camunda.bpmn.message2", message);
-        try {
+        /*try {
 			receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

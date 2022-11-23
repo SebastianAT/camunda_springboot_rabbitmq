@@ -1,0 +1,10 @@
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+
+server.port: 8096
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
+  filter:
+    create: All tasks
+  license-file: file:///camunda-license.txt
+  application.deploy-changed-only: true

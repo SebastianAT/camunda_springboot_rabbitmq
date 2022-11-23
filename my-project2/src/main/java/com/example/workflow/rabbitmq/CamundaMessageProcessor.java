@@ -24,15 +24,26 @@ public class CamundaMessageProcessor{
         CorrelationMessageDto messageDto = null;
 		try {
 			messageDto = objectMapper.readValue(message, CorrelationMessageDto.class);
+			System.out.println("MESSAGE: " + message);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Error json: ");
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Error json: ");
 			e.printStackTrace();
 		}
         MessageRestServiceImpl service = new MessageRestServiceImpl(engine.getName(), objectMapper);
-        Response response = service.deliverMessage(messageDto);
+        System.out.println("Take out msg from queue ...");
+        try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	Response response = service.deliverMessage(messageDto);
+        System.out.println("Response deliverMessage " + response.toString());
         return response;
     }
 }

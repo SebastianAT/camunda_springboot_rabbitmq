@@ -1,0 +1,8 @@
+com\example\workflow\CamundaMessageRabbitRestController.class
+ConfirmCallbackService.class
+com\example\workflow\rabbitmq\Consumer.class
+com\example\workflow\RabbitConfiguration.class
+com\example\workflow\Application.class
+com\example\workflow\LoggerDelegate.class
+com\example\workflow\RabbitConfiguration$1.class
+com\example\workflow\SendMessageRest.class

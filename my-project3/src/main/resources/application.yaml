@@ -4,3 +4,7 @@ server.port: 8093
 camunda.bpm.admin-user:
   id: demo
   password: demo
+  filter:
+    create: All tasks
+  license-file: file:///camunda-license.txt
+  application.deploy-changed-only: true

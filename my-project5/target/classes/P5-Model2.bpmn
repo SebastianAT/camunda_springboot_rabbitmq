@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1tb1wd3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1">
+  <bpmn:process id="Process_0l3ibgw_P1" name="P1_Model" processType="None" isClosed="false" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="[P1]">
+      <bpmn:outgoing>Flow_0bq53ke</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Activity_170nqlb" name="T1 [P1]">
+      <bpmn:incoming>Flow_0bq53ke</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yp77ot</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0bq53ke" sourceRef="StartEvent_1" targetRef="Activity_170nqlb" />
+    <bpmn:endEvent id="Event_1m1gnt6" name="[P1]">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.example.workflow.LoggerDelegate" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>task15-Event_1m1gnt6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0yp77ot" sourceRef="Activity_170nqlb" targetRef="task13" />
+    <bpmn:sendTask id="task13" name="Send(P6) [P1]" implementation="##WebService" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:documentation>task120</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="type" value="sendStep" />
+        </camunda:properties>
+        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${sendMessageRest}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0yp77ot</bpmn:incoming>
+      <bpmn:outgoing>task13-task1</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="task13-task1" sourceRef="task13" targetRef="Activity_06l7e4k" />
+    <bpmn:exclusiveGateway id="task15" name="join_loop_Activity_06l7e4k [P1]" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:incoming>task6-task15</bpmn:incoming>
+      <bpmn:outgoing>task15-Event_1m1gnt6</bpmn:outgoing>
+      <bpmn:outgoing>task15-Activity_06l7e4k</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="task15-Event_1m1gnt6" name="yes" sourceRef="task15" targetRef="Event_1m1gnt6">
+      <bpmn:conditionExpression ns0:type="bpmn:tFormalExpression" id="conditionExpression_6cf7998c-028c-464e-9b09-de791a2086c0">=execution.getVariable("c") = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Activity_06l7e4k" name="split_loop_Activity_06l7e4k [P1]" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:incoming>task13-task1</bpmn:incoming>
+      <bpmn:incoming>task15-Activity_06l7e4k</bpmn:incoming>
+      <bpmn:outgoing>Activity_06l7e4kTMP-task15</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Activity_06l7e4kTMP-task15" sourceRef="Activity_06l7e4k" targetRef="Activity_0td1jhk" />
+    <bpmn:receiveTask id="task6" name="Receive({c} P6) [P1]" messageRef="msg1" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="type" value="receiveStep" />
+        </camunda:properties>
+        <camunda:properties>
+          <camunda:property name="type" value="communicationStep" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>task9-task6</bpmn:incoming>
+      <bpmn:outgoing>task6-task15</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sequenceFlow id="task6-task15" sourceRef="task6" targetRef="task15" />
+    <bpmn:sendTask id="task9" name="Send(P6) [P1]" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:documentation id="documentation_4d3177aa-2497-47ac-a3a4-eaf6eef2c7ba">task11</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="type" value="sendStep" />
+        </camunda:properties>
+        <camunda:properties>
+          <camunda:property name="type" value="communicationStep" />
+        </camunda:properties>
+        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${sendMessageRest}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Activity_0td1jhk-task9</bpmn:incoming>
+      <bpmn:outgoing>task9-task6</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="task9-task6" sourceRef="task9" targetRef="task6" />
+    <bpmn:sequenceFlow id="Activity_0td1jhk-task9" sourceRef="Activity_0td1jhk" targetRef="task9" />
+    <bpmn:sequenceFlow id="task15-Activity_06l7e4k" name="no" sourceRef="task15" targetRef="Activity_06l7e4k">
+      <bpmn:conditionExpression ns0:type="bpmn:tFormalExpression" id="conditionExpression_fd72e994-6bba-4234-a264-fe0b8cc4e0f0">=execution.getVariable("c") = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_0td1jhk" name="T2 [P1]">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="type" value="communicationStep" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Activity_06l7e4kTMP-task15</bpmn:incoming>
+      <bpmn:outgoing>Activity_0td1jhk-task9</bpmn:outgoing>
+    </bpmn:task>
+  </bpmn:process>
+  <bpmn:message id="msg1" name="msg_task6" />
+  <bpmn:message id="Message_0jfl5c0" name="msg_task22" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0l3ibgw_P1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="161" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="160" y="204" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_170nqlb_di" bpmnElement="Activity_170nqlb">
+        <dc:Bounds x="250" y="144" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1m1gnt6_di" bpmnElement="Event_1m1gnt6">
+        <dc:Bounds x="1340" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1348" y="202" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task13_di" bpmnElement="task13" bioc:stroke="#000000FF" bioc:fill="#FFFFFFFF">
+        <dc:Bounds x="405" y="144" width="50" height="80" />
+        <bpmndi:BPMNLabel id="task13_label">
+          <dc:Bounds x="580" y="217" width="50" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task15_di" bpmnElement="task15" isMarkerVisible="true">
+        <dc:Bounds x="1210" y="159" width="50" height="50" />
+        <bpmndi:BPMNLabel id="task15_label">
+          <dc:Bounds x="1196" y="209" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06l7e4kTMP_di" bpmnElement="Activity_06l7e4k" isMarkerVisible="true">
+        <dc:Bounds x="572" y="159" width="50" height="50" />
+        <bpmndi:BPMNLabel id="Activity_06l7e4kTMP_label">
+          <dc:Bounds x="556" y="209" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task6_di" bpmnElement="task6">
+        <dc:Bounds x="1080" y="159" width="50" height="80" />
+        <bpmndi:BPMNLabel id="task6_label">
+          <dc:Bounds x="3562" y="239" width="50" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task9_di" bpmnElement="task9">
+        <dc:Bounds x="950" y="159" width="50" height="80" />
+        <bpmndi:BPMNLabel id="task9_label">
+          <dc:Bounds x="3432" y="239" width="50" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ysim2z_di" bpmnElement="Activity_0td1jhk">
+        <dc:Bounds x="820" y="159" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0bq53ke_di" bpmnElement="Flow_0bq53ke">
+        <di:waypoint x="188" y="179" />
+        <di:waypoint x="250" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yp77ot_di" bpmnElement="Flow_0yp77ot">
+        <di:waypoint x="350" y="184" />
+        <di:waypoint x="405" y="184" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task13-task1_di" bpmnElement="task13-task1">
+        <di:waypoint x="455" y="184" />
+        <di:waypoint x="572" y="184" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task15-Event_1m1gnt6_di" bpmnElement="task15-Event_1m1gnt6">
+        <di:waypoint x="1235" y="209" />
+        <di:waypoint x="1358" y="159" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1288" y="159" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Activity_06l7e4kTMP-task15_di" bpmnElement="Activity_06l7e4kTMP-task15">
+        <di:waypoint x="617" y="179" />
+        <di:waypoint x="820" y="179" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task6-task15_di" bpmnElement="task6-task15">
+        <di:waypoint x="1105" y="239" />
+        <di:waypoint x="1235" y="159" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task9-task6_di" bpmnElement="task9-task6">
+        <di:waypoint x="975" y="239" />
+        <di:waypoint x="1105" y="159" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Activity_0td1jhk-task9_di" bpmnElement="Activity_0td1jhk-task9">
+        <di:waypoint x="920" y="199" />
+        <di:waypoint x="950" y="199" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="task15-Activity_06l7e4k_di" bpmnElement="task15-Activity_06l7e4k">
+        <di:waypoint x="1235" y="159" />
+        <di:waypoint x="1235" y="109" />
+        <di:waypoint x="597" y="109" />
+        <di:waypoint x="597" y="159" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1055" y="84" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
