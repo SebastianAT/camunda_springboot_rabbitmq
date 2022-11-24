@@ -39,7 +39,7 @@ public class Consumer {
         	System.out.println("info: " + message);
             String correlationData = (String) messageProperties.getHeaders().get("spring_listener_return_correlation"); // spring_returned_message_correlation
             message.getMessageProperties().setHeader("x-last-fail-reason", "Exception:[" + e.getMessage() + "]");
-            logger.error("Nachricht konnte nicht verarbeitet werden: [" + e.getMessage() + "], Ursprüngliche Nachricht: [" + new String(message.getBody()) + "] correlationId:" + correlationData);
+            logger.error("Nachricht konnte nicht verarbeitet werden: [" + e.getMessage() + "], Ursprüngliche Nachricht: [" + new String(message.getBody()) + "] correlationId:" + correlationId);
             long retryCount = getRetryCount(messageProperties);
             try {
                 if (retryCount <= 3) {
@@ -54,7 +54,7 @@ public class Consumer {
                             RabbitConfiguration.FAIL_ROUTING_KEY,
                             message,
                             correlationIdProcessor,
-                            new CorrelationData(correlationData)
+                            new CorrelationData(correlationId)
                     );
                     logger.info("Wenn es dreimal hintereinander fehlschlägt, senden Sie die Nachricht an die Warteschlange für unzustellbare Nachrichten und senden Sie die Nachricht: " + new String(message.getBody()));
                 }
