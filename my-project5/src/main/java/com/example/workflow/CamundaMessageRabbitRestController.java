@@ -36,7 +36,7 @@ public class CamundaMessageRabbitRestController{
             produces = "application/json")
     String addMessage(@RequestBody String message){
        
-    	logger.info("create random uuid for correlation");
+    	logger.info("create random uuid for correlation msg: " + message);
         CorrelationData data = new CorrelationData(UUID.randomUUID().toString());
         rabbitTemplate.convertAndSend(RabbitConfiguration.WORKING_EXCHANGE, RabbitConfiguration.WORKING_DEMO_ROUTINGKEY,
                 message, correlationIdProcessor, data);

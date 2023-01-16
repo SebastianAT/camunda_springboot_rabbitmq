@@ -180,12 +180,15 @@ public class RabbitConfiguration {
                 if (correlation instanceof CorrelationData) {
                     String correlationId = ((CorrelationData) correlation).getId();
                     messageProperties.setCorrelationId(correlationId);
+                    messageProperties.setContentType("application/json");
+                    messageProperties.setContentLength(message.getBody().length);
                 }
                 return message;
             }
 
             @Override
             public Message postProcessMessage(Message message) throws AmqpException {
+            	System.out.println("eeeeeeeeerrrrrrrrooooorrrrrrr " + message.getMessageProperties());
                 return message;
             }
         };

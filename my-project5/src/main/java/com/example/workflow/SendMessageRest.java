@@ -138,7 +138,8 @@ public class SendMessageRest implements JavaDelegate {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		entity2 = new HttpEntity<String>(obj.toString(), headers);
+		String send = "{\"messageName\":\"msg_task120\"}";
+		entity2 = new HttpEntity<String>(send, headers);
 		
 		/*HttpEntity<RestMessageDto> entity = new HttpEntity<RestMessageDto>(//
 				new RestMessageDto(messageName, businessKey), // here is the JSON body
